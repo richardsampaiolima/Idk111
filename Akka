@@ -1,0 +1,36 @@
+-- Referência ao jogador local e ao script
+local player = game.Players.LocalPlayer
+local scriptRunning = false
+
+-- Função para ativar/desativar o script
+local function toggleScript()
+    scriptRunning = not scriptRunning
+end
+
+-- Criar um GUI
+local gui = Instance.new("ScreenGui")
+gui.Parent = player.PlayerGui
+
+-- Criar um botão de alternância
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 100, 0, 30)
+toggleButton.Position = UDim2.new(0, 10, 0, 10)
+toggleButton.Text = "Ativar/Desativar"
+toggleButton.Parent = gui
+
+-- Conectar o evento de clique do botão à função toggleScript
+toggleButton.MouseButton1Click:Connect(toggleScript)
+
+-- Loop principal
+while wait(0.00001) do
+    if scriptRunning then
+        local character = player.Character
+
+        if character and character:FindFirstChild("Double Weight") then
+            local handle = character:FindFirstChild("Double Weight").Handle
+            local args = {handle, 99}
+
+            game:GetService("ReplicatedStorage"):WaitForChild("addStrength"):FireServer(unpack(args))
+        end
+    end
+end
